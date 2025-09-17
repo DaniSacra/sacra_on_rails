@@ -3,7 +3,6 @@ module SacraOnRails
   module TestHelper
     
     def assert(expected, msg = nil)
-      puts msg || "Testando true"
       raise "Teste de #{expected.inspect} falhou" unless expected
     end
 
@@ -11,12 +10,21 @@ module SacraOnRails
       raise "Esperado que #{expected} fosse igual a #{actual}" unless expected == actual
     end
 
-    # Método para executar um teste individual e capturar erros
+    def assert_nil(value, msg = nil)
+      raise "Esperado que #{value.inspect} fosse nil" unless value.nil?
+    end
+
+    # Método para executar um teste individual e mostrar resultado
     def self.run_test(test_name, &block)
+      print "#{test_name}... "
+      
       begin
         yield
+        puts "PASSOU"
         { status: :passed, test_name: test_name, error: nil }
       rescue StandardError => e
+        puts "FALHOU"
+        puts "   Erro: #{e.message}"
         { status: :failed, test_name: test_name, error: e }
       end
     end
